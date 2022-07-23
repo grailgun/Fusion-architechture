@@ -14,6 +14,7 @@ namespace RandomProject
 		public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
             Debug.Log($"Player {player} Joined!");
+
 			if (runner.IsServer)
 			{
 				runner.Spawn(roomPlayerPrefab, Vector3.zero, Quaternion.identity, player);
@@ -24,7 +25,8 @@ namespace RandomProject
 		public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
         {
             Debug.Log($"{player.PlayerId} disconnected.");
-			PlayerInfo.RemovePlayer(runner, player);
+
+            PlayerInfo.RemovePlayer(runner, player);
 			launcher.SetConnectionStatus(Launcher.ConnectionStatus);
         }
     }
