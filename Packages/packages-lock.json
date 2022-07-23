@@ -87,15 +87,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.postprocessing": {
-      "version": "3.2.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.physics": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.render-pipelines.core": {
       "version": "12.1.6",
       "depth": 1,
@@ -184,13 +175,6 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
-    },
-    "com.unity.uiextensions": {
-      "version": "https://bitbucket.org/UnityUIExtensions/unity-ui-extensions.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "9fadad0f729068b360ce4257df39850a3349f0a4"
     },
     "com.unity.visualscripting": {
       "version": "1.7.6",

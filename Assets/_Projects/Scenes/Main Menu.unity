@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414736, b: 0.12107852, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -810,7 +810,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 951
 --- !u!114 &1223535199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,10 +1123,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1033326020}
     m_Modifications:
-    - target: {fileID: 622995220, guid: a945c38cf7be00d4990fb66d519ee34f, type: 3}
-      propertyPath: m_Name
-      value: Room Name
-      objectReference: {fileID: 0}
     - target: {fileID: 6217139400043211212, guid: a945c38cf7be00d4990fb66d519ee34f,
         type: 3}
       propertyPath: m_Name
