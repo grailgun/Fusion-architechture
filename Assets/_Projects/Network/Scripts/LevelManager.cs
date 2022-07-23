@@ -29,7 +29,6 @@ namespace RandomProject
 		{
 			Debug.Log($"Loading scene {newScene}");
 			List<NetworkObject> sceneObjects = new List<NetworkObject>();
-			launcher.connectionCanvas.SetActive(newScene != GAMEPLAY_SCENE);
 			yield return SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Single);
 			Scene loadedScene = SceneManager.GetSceneByBuildIndex(newScene);
 			Debug.Log($"Loaded scene {newScene}: {loadedScene}");

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,12 +23,16 @@ namespace RandomProject
     {
         public static ConnectionStatus ConnectionStatus = ConnectionStatus.Disconnected;
 
+        [Title("Active Game Runner Object")]
         [SerializeField] private GameObject gameRunner;
-        public InputHandle inputHandle;
-        [SerializeField] private ConnectionHandle connectionHandle;
-        [SerializeField] private PlayerHandle playerHandle;
 
-        public GameObject connectionCanvas;
+        [Title("Runner Callbacks")]
+        [SerializeField] private InputHandle inputHandle;
+        public InputHandle InputHandle { get => inputHandle; }
+        [SerializeField] private ConnectionHandle connectionHandle;
+        public ConnectionHandle ConnectionHandle { get => ConnectionHandle; }
+        [SerializeField] private PlayerHandle playerHandle;
+        public PlayerHandle PlayerHandle { get => PlayerHandle; }
 
 		public GameMode _gameMode { get; set;}
         public NetworkRunner _runner { get; set; }
@@ -45,13 +50,7 @@ namespace RandomProject
             connectionHandle.Init(this);
             playerHandle.Init(this);
 
-            //SceneManager.LoadScene(mainMenuScene.ScenePath);
-
-            /*SetCreateLobby();
-            ServerInfo.LobbyName = "Test";
-            JoinOrCreateRoom();*/
-
-            StartSinglePlayer();
+            SceneManager.LoadScene((int)SceneEnum.MAIN_MENU);
         }
 
         public void SetCreateLobby() => _gameMode = GameMode.Host;

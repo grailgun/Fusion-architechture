@@ -75,7 +75,7 @@ namespace RandomProject
             
             if (Object.HasInputAuthority)
             {
-                inputHandle = Launcher.Instance.inputHandle;
+                inputHandle = Launcher.Instance.InputHandle;
             }
         }
 

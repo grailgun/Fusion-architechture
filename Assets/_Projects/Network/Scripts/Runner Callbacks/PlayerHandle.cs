@@ -7,16 +7,9 @@ using UnityEngine;
 
 namespace RandomProject
 {
-    public class PlayerHandle : MonoBehaviour
+    public class PlayerHandle : RunnerCallback
     {
         public PlayerInfo roomPlayerPrefab;
-
-        private Launcher launcher;
-
-		public void Init(Launcher launcher)
-		{
-			this.launcher = launcher;
-		}
 
 		public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {

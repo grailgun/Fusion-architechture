@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace RandomProject
 {
-	public class InputHandle : MonoBehaviour
+	public class InputHandle : RunnerCallback
 	{
 		[Header("Character Input Values")]
 		public Vector2 move;
@@ -21,13 +21,6 @@ namespace RandomProject
 		public bool cursorInputForLook = true;
 
 		private bool interactPressed;
-
-		private Launcher launcher;
-
-		public void Init(Launcher launcher)
-		{
-			this.launcher = launcher;
-		}
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)

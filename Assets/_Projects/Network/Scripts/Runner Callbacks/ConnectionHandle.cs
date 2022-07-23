@@ -7,15 +7,8 @@ using UnityEngine;
 
 namespace RandomProject
 {
-    public class ConnectionHandle : MonoBehaviour
+    public class ConnectionHandle : RunnerCallback
     {
-        private Launcher launcher;
-
-		public void Init(Launcher launcher)
-		{
-			this.launcher = launcher;
-		}
-
         public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
         {
             Debug.Log($"OnShutdown {shutdownReason}");
