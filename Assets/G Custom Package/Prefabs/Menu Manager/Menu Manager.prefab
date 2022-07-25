@@ -29,6 +29,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -94,6 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e982496cef2d3094ba602b46bb7290fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuScreens: []
-  autoStartScreen: 0
-  startScreen: 0
+  menuScreens:
+  - {fileID: 8131657702002428495, guid: 12c6ee16642aea247bd0dc3a2bef6221, type: 3}
+  - {fileID: 2065484118464926464, guid: b05691748767dc74580bf9664e8e81c0, type: 3}
+  autoStartMenu: 1
+  startMenu: {fileID: 2065484118464926464, guid: b05691748767dc74580bf9664e8e81c0,
+    type: 3}
