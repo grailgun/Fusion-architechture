@@ -50,8 +50,6 @@ namespace BayatGames.Utilities.Editor
 
         protected virtual void PlayModeStateChanged(PlayModeStateChange state)
         {
-            Debug.Log(state);
-            Debug.Log(this.lastScene);
             switch (state)
             {
                 case PlayModeStateChange.EnteredEditMode:

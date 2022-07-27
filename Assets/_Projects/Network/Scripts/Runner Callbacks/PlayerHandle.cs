@@ -9,7 +9,7 @@ namespace RandomProject
 {
     public class PlayerHandle : RunnerCallback
     {
-        public PlayerInfo roomPlayerPrefab;
+        public PlayerInfo playerInfoPrefab;
 
 		public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
@@ -17,8 +17,9 @@ namespace RandomProject
 
 			if (runner.IsServer)
 			{
-				runner.Spawn(roomPlayerPrefab, Vector3.zero, Quaternion.identity, player);
+				runner.Spawn(playerInfoPrefab, Vector3.zero, Quaternion.identity, player);
 			}
+
 			launcher.SetConnectionStatus(ConnectionStatus.Connected);
         }
 
@@ -26,7 +27,8 @@ namespace RandomProject
         {
             Debug.Log($"{player.PlayerId} disconnected.");
 
-            PlayerInfo.RemovePlayer(runner, player);
+            PlayerManager.RemovePlayer(runner, player);
+
 			launcher.SetConnectionStatus(Launcher.ConnectionStatus);
         }
     }

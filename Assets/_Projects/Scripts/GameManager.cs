@@ -22,8 +22,8 @@ namespace RandomProject
 
         private void SpawnAllPlayer()
         {
-            var allPlayer = PlayerInfo.AllPlayers;
-            Debug.Log(allPlayer.Count);
+            var allPlayer = PlayerManager.AllPlayers;
+            
             foreach (var p in allPlayer)
             {
                 Runner.Spawn(

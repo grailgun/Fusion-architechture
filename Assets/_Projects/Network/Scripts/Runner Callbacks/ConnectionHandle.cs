@@ -16,7 +16,7 @@ namespace RandomProject
 
 			(string status, string message) = ConnectionUtility.ShutdownReasonToHuman(shutdownReason);
 
-            PlayerInfo.AllPlayers.Clear();
+            PlayerManager.AllPlayers.Clear();
         }
 
         public void OnConnectedToServer(NetworkRunner runner)
@@ -28,7 +28,7 @@ namespace RandomProject
         public void OnDisconnectedFromServer(NetworkRunner runner)
         {
             Debug.Log("Disconnected from server");
-			launcher.LeaveSession();
+			launcher.Disconnect();
 			launcher.SetConnectionStatus(ConnectionStatus.Disconnected);
         }
 
@@ -47,7 +47,7 @@ namespace RandomProject
         public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
         {
             Debug.Log($"Connect failed {reason}");
-			launcher.LeaveSession();
+			launcher.Disconnect();
 			launcher.SetConnectionStatus(ConnectionStatus.Failed);
 			(string status, string message) = ConnectionUtility.ConnectFailedReasonToHuman(reason);
             

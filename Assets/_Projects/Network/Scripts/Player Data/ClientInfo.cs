@@ -6,16 +6,19 @@ namespace RandomProject
 {
     public static class ClientInfo
     {
+        private static string username;
+        private static int level;
+
         public static string Username
         {
-            get => PlayerPrefs.GetString("C_Username", "");
-            set => PlayerPrefs.SetString("C_Username", value);
+            get => username;
+            set => username = value;
         }
 
-        public static string LobbyName
+        public static int Level
         {
-            get => PlayerPrefs.GetString("C_LastLobbyName", "");
-            set => PlayerPrefs.SetString("C_LastLobbyName", value);
+            get => level;
+            set => level = value;
         }
     }
 }

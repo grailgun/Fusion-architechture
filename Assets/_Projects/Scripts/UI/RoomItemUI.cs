@@ -1,18 +1,32 @@
+using Fusion;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class RoomItemUI : MonoBehaviour
+namespace RandomProject
 {
-    // Start is called before the first frame update
-    void Start()
+    public class RoomItemUI : MonoBehaviour
     {
-        
-    }
+        [SerializeField]
+        private TextMeshProUGUI roomName;
+        [SerializeField]
+        private TextMeshProUGUI playerAmount;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private SessionInfo info;
+
+        public void SetRoom(SessionInfo info)
+        {
+            this.info = info;
+            roomName.text = info.Name;
+            playerAmount.text = $"{info.PlayerCount}/{info.MaxPlayers}";
+        }
+
+        public void OnPressed()
+        {
+            Debug.Log("On Pressed");
+            Launcher.Instance.JoinSession(info);
+        }
     }
 }

@@ -8,11 +8,19 @@ namespace RandomProject
 {
     public class PlayerInfo : NetworkBehaviour
     {
-        public static readonly List<PlayerInfo> AllPlayers = new List<PlayerInfo>();
-
         public static PlayerInfo Local;
-        [Networked]
+
+        [Networked(OnChanged = nameof(OnPlayerDataChanged))]
         public string Username { get; set; }
+
+        [Networked]
+        public int Level { get; set; }
+
+        private static void OnPlayerDataChanged(Changed<PlayerInfo> changed) => changed.Behaviour.OnPlayerInfoChange();
+        private void OnPlayerInfoChange()
+        {
+            PlayerManager.Instance.ChangePlayerInfo(this);
+        }
 
         public override void Spawned()
         {
@@ -22,16 +30,17 @@ namespace RandomProject
             {
                 Local = this;
                 RPC_SetUsername(ClientInfo.Username);
+                RPC_SetLevel(ClientInfo.Level);
             }
 
-            AllPlayers.Add(this);
+            PlayerManager.Instance.AddPlayer(this);
             
             DontDestroyOnLoad(gameObject);
         }
 
         private void OnDisable()
         {
-            AllPlayers.Remove(this);
+            PlayerManager.Instance.RemovePlayer(this);
         }
 
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
@@ -40,14 +49,10 @@ namespace RandomProject
             Username = uname;
         }
 
-        public static void RemovePlayer(NetworkRunner runner, PlayerRef player)
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+        private void RPC_SetLevel(int value)
         {
-            var p = AllPlayers.FirstOrDefault(x => x.Object.InputAuthority == player);
-            if (p)
-            {
-                AllPlayers.Remove(p);
-                runner.Despawn(p.Object);
-            }
+            Level = value;
         }
     }
 }

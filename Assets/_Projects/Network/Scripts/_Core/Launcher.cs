@@ -16,31 +16,40 @@ namespace RandomProject
 		Disconnected,
 		Connecting,
 		Failed,
-		Connected
-	}
+		Connected,
+        Starting,
+        EnteringLobby,
+        EnteringRoom,
+        InLobby,
+        InRoom
+    }
 
     public class Launcher : Singleton<Launcher>, INetworkRunnerCallbacks
     {
         public static ConnectionStatus ConnectionStatus = ConnectionStatus.Disconnected;
 
-        [Title("Active Game Runner Object")]
+        [Title("Game Runner Object")]
         [SerializeField] private GameObject gameRunner;
-
-        [Title("Runner Callbacks")]
-        [SerializeField] private InputHandle inputHandle;
-        public InputHandle InputHandle { get => inputHandle; }
-        [SerializeField] private ConnectionHandle connectionHandle;
-        public ConnectionHandle ConnectionHandle { get => ConnectionHandle; }
-        [SerializeField] private PlayerHandle playerHandle;
-        public PlayerHandle PlayerHandle { get => PlayerHandle; }
-
 		public GameMode _gameMode { get; set;}
         public NetworkRunner _runner { get; set; }
         public FusionObjectPoolRoot _pool { get; private set; }
         public LevelManager levelManager { get; private set; }
 
+        [Title("Runner Callbacks")]
+        [SerializeField] private InputHandle inputHandle;
+        [SerializeField] private ConnectionHandle connectionHandle;
+        [SerializeField] private PlayerHandle playerHandle;
+        public ConnectionHandle ConnectionHandle { get => ConnectionHandle; }
+        public InputHandle InputHandle { get => inputHandle; }
+        public PlayerHandle PlayerHandle { get => PlayerHandle; }
+
+        //Lobby
+        private string lobbyID;
+        private Action<List<SessionInfo>> onSessionListUpdated;
+
         protected override void Awake() {
             base.Awake();
+
             levelManager = GetComponent<LevelManager>();
         }
 
@@ -50,61 +59,181 @@ namespace RandomProject
             connectionHandle.Init(this);
             playerHandle.Init(this);
 
+            lobbyID = "Default";
+
             SceneManager.LoadScene((int)SceneEnum.MAIN_MENU);
         }
 
         public void SetCreateLobby() => _gameMode = GameMode.Host;
 		public void SetJoinLobby() => _gameMode = GameMode.Client;
 
-		public void JoinOrCreateRoom()
-		{
-			SetConnectionStatus(ConnectionStatus.Connecting);
-
-			if (_runner != null)
-				LeaveSession();
-
-			GameObject go = Instantiate(gameRunner);
-            _pool = go.GetComponent<FusionObjectPoolRoot>();
-
-			_runner = go.GetComponent<NetworkRunner>();
-			_runner.ProvideInput = _gameMode != GameMode.Server;
-            _runner.AddCallbacks(this);
-
-			Debug.Log($"Created gameobject {go.name} - starting game");
-
-			_runner.StartGame(new StartGameArgs
-			{
-				GameMode = _gameMode,
-				SessionName = _gameMode == GameMode.Host ? ServerInfo.LobbyName : ClientInfo.LobbyName,
-				ObjectPool = _pool,
-				SceneManager = levelManager,
-				PlayerCount = ServerInfo.MaxUsers,
-				DisableClientSessionCreation = true
-			});
-		}
-
-        private void StartSinglePlayer()
+        private void Connect()
         {
-            GameObject go = Instantiate(gameRunner);
-            _pool = go.GetComponent<FusionObjectPoolRoot>();
-
-            _runner = go.GetComponent<NetworkRunner>();
-            _runner.ProvideInput = _gameMode != GameMode.Server;
-            _runner.AddCallbacks(this);
-
-            var task = InitializeNetworkRunner(_runner, GameMode.AutoHostOrClient, 1, null);
-        }
-
-        protected virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, SceneRef scene, Action<NetworkRunner> initialized)
-        {
-            return runner.StartGame(new StartGameArgs
+            if (_runner == null)
             {
-                GameMode = gameMode,
-                SessionName = "Single Mode",
-                Initialized = initialized,
-                SceneManager = levelManager
-            });
+                GameObject go = Instantiate(gameRunner);
+                _pool = go.GetComponent<FusionObjectPoolRoot>();
+
+                _runner = go.GetComponent<NetworkRunner>();
+                _runner.ProvideInput = _gameMode != GameMode.Server;
+                _runner.AddCallbacks(this);
+
+                Debug.Log($"Created gameobject {go.name} - starting game");
+            }
         }
+
+        public void Disconnect()
+        {
+            if (_runner != null)
+            {
+                SetConnectionStatus(ConnectionStatus.Disconnected);
+                _runner.Shutdown();
+            }
+        }
+
+        //Ini join session dari Lobby
+        public void JoinSession(SessionInfo info)
+        {
+            SessionSetting setting = new SessionSetting();
+            setting.gameMode = GameMode.Client;
+            setting.sessionName = info.Name;
+
+            JoinSessionByName(setting);
+        }
+
+        //Ini join session dari Join button
+        public void JoinSession(SessionSetting setting)
+        {
+            JoinSessionByName(setting);
+        }
+
+        //Ini buat session dari Host button
+        public void CreateSession(SessionSetting setting, SessionProperties props)
+        {
+            StartNewSession(setting, props, true);
+        }
+
+        #region Create Session
+        public async void FindSessionByProperties(SessionSetting setting, SessionProperties props, bool disableClientSessionCreation = true,
+            Action OnSuccess = null, Action OnFailed = null)
+        {
+            Connect();
+            SetConnectionStatus(ConnectionStatus.Connecting);
+            
+            Debug.Log($"Starting game with Properties");
+            _runner.ProvideInput = setting.gameMode != GameMode.Server;
+
+            var result = await _runner.StartGame(new StartGameArgs
+            {
+                GameMode = setting.gameMode,
+                CustomLobbyName = lobbyID,
+                PlayerCount = setting.playerLimit,
+                SessionProperties = props.Properties,
+                DisableClientSessionCreation = disableClientSessionCreation,
+                SceneManager = levelManager,
+                ObjectPool = _pool
+            });
+
+            if (result.Ok)
+            {
+                OnSuccess?.Invoke();
+            }
+            else
+            {
+                OnFailed?.Invoke();
+            }
+        }
+
+        private async void JoinSessionByName(SessionSetting setting, bool disableClientSessionCreation = true,
+            Action OnSuccess = null, Action OnFailed = null)
+        {
+            Connect();
+            SetConnectionStatus(ConnectionStatus.Connecting);
+
+            Debug.Log($"Join to session {setting.sessionName}");
+            _runner.ProvideInput = setting.gameMode != GameMode.Server;
+
+            var result = await _runner.StartGame(new StartGameArgs
+            {
+                SessionName = setting.sessionName,
+
+                GameMode = setting.gameMode,
+                CustomLobbyName = lobbyID,
+                SceneManager = levelManager,
+                DisableClientSessionCreation = disableClientSessionCreation,
+                ObjectPool = _pool
+            });
+
+            if (result.Ok)
+            {
+                OnSuccess?.Invoke();
+            }
+            else
+            {
+                OnFailed?.Invoke();
+            }
+        }
+
+        private async void StartNewSession(SessionSetting setting, SessionProperties props, bool disableClientSessionCreation = true, 
+            Action OnSuccess = null, Action OnFailed = null)
+        {
+            Connect();
+            SetConnectionStatus(ConnectionStatus.Starting);
+
+            Debug.Log($"Starting game with session {setting.sessionName}");
+            _runner.ProvideInput = setting.gameMode != GameMode.Server;
+
+            var result = await _runner.StartGame(new StartGameArgs
+            {
+                SessionName = setting.sessionName,
+
+                GameMode = setting.gameMode,
+                CustomLobbyName = lobbyID,
+                PlayerCount = setting.playerLimit,
+                SessionProperties = props.Properties,
+                DisableClientSessionCreation = disableClientSessionCreation,
+                SceneManager = levelManager,
+                ObjectPool = _pool
+            });
+
+            if (result.Ok)
+            {
+                _runner.SessionInfo.IsVisible = setting.isVisible;
+
+                OnSuccess?.Invoke();
+            }
+            else
+            {
+                OnFailed?.Invoke();
+            }
+        }
+
+        public async Task EnterLobby(string lobbyId, Action<List<SessionInfo>> onSessionListUpdatedCallback,
+            Action OnSuccess = null, Action OnFailed = null)
+        {
+            Connect();
+            SetConnectionStatus(ConnectionStatus.EnteringLobby);
+
+            lobbyID = lobbyId;
+            onSessionListUpdated = onSessionListUpdatedCallback;
+
+            var result = await _runner.JoinSessionLobby(SessionLobby.Custom, lobbyId);
+
+            if (result.Ok)
+            {
+                OnSuccess?.Invoke();
+            }
+            else
+            {
+                onSessionListUpdated = null;
+                SetConnectionStatus(ConnectionStatus.Failed);
+                onSessionListUpdatedCallback(null);
+                OnFailed?.Invoke();
+            }
+        }
+        #endregion
+
+        //==============================================================================================================//
 
         public void SetConnectionStatus(ConnectionStatus status)
 		{
@@ -121,19 +250,6 @@ namespace RandomProject
 				SceneManager.LoadScene(0);
 			}
 		}
-
-        public void LeaveSession()
-		{
-			if (_runner != null)
-				_runner.Shutdown();
-			else
-				SetConnectionStatus(ConnectionStatus.Disconnected);
-		}
-
-        public void ShowLoading(bool condition)
-        {
-            
-        }
 
         #region RUNNER CALLBACKS
         //RUNNER CALLBACKS
@@ -163,8 +279,13 @@ namespace RandomProject
             // Reset the object pools
             _pool.ClearPools();
             _pool = null;
-
+            PlayerManager.AllPlayers.Clear();
             _runner = null;
+
+            if (Application.isPlaying)
+            {
+                SceneManager.LoadSceneAsync((int)SceneEnum.MAIN_MENU);
+            }
         }
         public void OnConnectedToServer(NetworkRunner runner)
         {
@@ -182,9 +303,13 @@ namespace RandomProject
         {
             connectionHandle.OnConnectFailed(runner, remoteAddress, reason);
         }
+        public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+        {
+            SetConnectionStatus(ConnectionStatus.InLobby);
+            onSessionListUpdated?.Invoke(sessionList);
+        }
 
         public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-        public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
         public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
         public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
         public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
