@@ -11,7 +11,7 @@ namespace RandomProject
     {
         public PlayerInfo playerInfoPrefab;
 
-		public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+		public override void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
             Debug.Log($"Player {player} Joined!");
 
@@ -23,7 +23,7 @@ namespace RandomProject
 			launcher.SetConnectionStatus(ConnectionStatus.Connected);
         }
 
-		public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+		public override void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
         {
             Debug.Log($"{player.PlayerId} disconnected.");
 

@@ -22,6 +22,20 @@ namespace RandomProject
 
 		private bool interactPressed;
 
+		public override void OnInput(NetworkRunner runner, NetworkInput input)
+		{
+			PlayerInputData data = new PlayerInputData();
+
+			data.move = move;
+			data.look = lookRotationForward;
+
+			if (interactPressed)
+				data.buttons |= PlayerInputData.INTERACT;
+			interactPressed = false;
+
+			input.Set(data);
+		}
+
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)
 		{
@@ -75,25 +89,6 @@ namespace RandomProject
 		private void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-		}
-
-		public void OnInput(NetworkRunner runner, NetworkInput input)
-		{
-			PlayerInputData data = new PlayerInputData();
-
-			data.move = move;
-			data.look = lookRotationForward;
-
-			if (interactPressed)
-				data.buttons |= PlayerInputData.INTERACT;
-			interactPressed = false;
-
-			input.Set(data);
-		}
-
-		public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
-		{
-
 		}
 	}
 }

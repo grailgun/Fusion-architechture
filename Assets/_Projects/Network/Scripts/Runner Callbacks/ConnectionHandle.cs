@@ -9,9 +9,8 @@ namespace RandomProject
 {
     public class ConnectionHandle : RunnerCallback
     {
-        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+        public override void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
         {
-            Debug.Log($"OnShutdown {shutdownReason}");
 			launcher.SetConnectionStatus(ConnectionStatus.Disconnected);
 
 			(string status, string message) = ConnectionUtility.ShutdownReasonToHuman(shutdownReason);
@@ -19,22 +18,19 @@ namespace RandomProject
             PlayerManager.AllPlayers.Clear();
         }
 
-        public void OnConnectedToServer(NetworkRunner runner)
+        public override void OnConnectedToServer(NetworkRunner runner)
         {
-            Debug.Log("Connected to server");
 			launcher.SetConnectionStatus(ConnectionStatus.Connected);
         }
 
-        public void OnDisconnectedFromServer(NetworkRunner runner)
+        public override void OnDisconnectedFromServer(NetworkRunner runner)
         {
-            Debug.Log("Disconnected from server");
-			launcher.Disconnect();
+			launcher.ShutdownRunner();
 			launcher.SetConnectionStatus(ConnectionStatus.Disconnected);
         }
 
-        public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
+        public override void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
         {
-            Debug.Log("Requesting to connect");
             if (runner.CurrentScene > 0)
 			{
 				Debug.LogWarning($"Refused connection requested by {request.RemoteAddress}");
@@ -44,13 +40,11 @@ namespace RandomProject
 				request.Accept();
         }
 
-        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
+        public override void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
         {
-            Debug.Log($"Connect failed {reason}");
-			launcher.Disconnect();
+			launcher.ShutdownRunner();
 			launcher.SetConnectionStatus(ConnectionStatus.Failed);
 			(string status, string message) = ConnectionUtility.ConnectFailedReasonToHuman(reason);
-            
         }
     }
 }
