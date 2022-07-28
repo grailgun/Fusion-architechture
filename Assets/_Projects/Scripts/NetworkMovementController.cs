@@ -73,10 +73,7 @@ namespace RandomProject
             CacheController();
             SetCanMove(true);
             
-            if (Object.HasInputAuthority)
-            {
-                inputHandle = Launcher.Instance.InputHandle;
-            }
+            
         }
 
         private void CacheController()
@@ -109,11 +106,6 @@ namespace RandomProject
                 var dir = transform.right * moveInput.x + transform.forward * moveInput.z;
                 Move(dir);
             }
-        }
-
-        private void LateUpdate()
-        {
-            CameraRotation();
         }
 
         private void CalculateDirection()
@@ -185,21 +177,7 @@ namespace RandomProject
             canMove = condition;
         }
 
-        private void CameraRotation()
-        {
-            if (inputHandle == null) return;
-
-            //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-            float deltaTimeMultiplier = 1f;
-
-            cinemachineTargetPitch += inputHandle.look.y * cameraSensitivity * deltaTimeMultiplier;
-            rotationVelocity = inputHandle.look.x * cameraSensitivity * deltaTimeMultiplier;
-
-            cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, BottomClamp, TopClamp);
-            CinemachineCameraTarget.localRotation = Quaternion.Euler(cinemachineTargetPitch, 0.0f, 0.0f);
-            
-            inputHandle.lookRotationForward = Vector3.up * rotationVelocity;
-        }
+        
 
         private float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {

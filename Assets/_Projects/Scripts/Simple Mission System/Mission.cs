@@ -19,6 +19,13 @@ namespace RandomProject
         Depok
     }
 
+    public enum MissionDifficulty
+    {
+        Ez,
+        Medium,
+        Hard
+    }
+
     [CreateAssetMenu(menuName = "Mission")]
     public class Mission : ScriptableObject
     {

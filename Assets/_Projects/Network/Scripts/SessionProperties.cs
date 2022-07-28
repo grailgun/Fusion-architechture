@@ -11,7 +11,9 @@ namespace RandomProject
     [Serializable]
     public class SessionProperties
     {
-        public int level = 0;
+		public MissionRegion missionRegion;
+		public string missionName;
+		public MissionDifficulty missionDifficulty;
 
 		public SessionProperties()
 		{

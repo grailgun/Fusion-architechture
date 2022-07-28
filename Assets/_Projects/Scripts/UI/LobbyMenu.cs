@@ -19,7 +19,7 @@ namespace RandomProject
 
         public void QuitLobby()
         {
-            Launcher.Instance.Disconnect();
+            Launcher.Instance.ShutdownRunner();
         }
 
         public async void ShowLobby()
@@ -45,7 +45,7 @@ namespace RandomProject
         {
             foreach (var roomItem in roomItems)
             {
-                Destroy(roomItem);
+                Destroy(roomItem.gameObject);
             }
 
             roomItems.Clear();

@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace RandomProject
 {
-    public struct SessionSetting
+    public class SessionSetting
     {
-        public GameMode gameMode;
-        public string sessionName;
-        public int playerLimit;
-        public bool isVisible;
+        public GameMode gameMode = GameMode.Client;
+        public string sessionName = "Auto Name";
+        public string lobbyID = "Default";
+        public int playerLimit = 5;
+        public bool isVisible = true;
     }
 }

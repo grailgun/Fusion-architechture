@@ -35,5 +35,11 @@ namespace RandomProject
             var missionByRegions = GetMissionListByRegion(region);
             return missionByRegions.Select(mission => mission.missionName).ToList();
         }
+
+        public int GetMissionIndexByRegion(MissionRegion region, string missionName)
+        {
+            var missionNameList = GetMissionNameListByRegion(region);
+            return missionNameList.IndexOf(missionName);
+        }
     }
 }

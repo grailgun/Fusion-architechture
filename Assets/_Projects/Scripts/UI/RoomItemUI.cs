@@ -13,20 +13,27 @@ namespace RandomProject
         private TextMeshProUGUI roomName;
         [SerializeField]
         private TextMeshProUGUI playerAmount;
+        [SerializeField]
+        private TextMeshProUGUI missionName;
 
         private SessionInfo info;
 
         public void SetRoom(SessionInfo info)
         {
             this.info = info;
+
             roomName.text = info.Name;
             playerAmount.text = $"{info.PlayerCount}/{info.MaxPlayers}";
+
+            SessionProperties props = new SessionProperties(info.Properties);
+
+            missionName.text = props.missionName;
         }
 
         public void OnPressed()
         {
-            Debug.Log("On Pressed");
             Launcher.Instance.JoinSession(info);
+            RoomMenu.Open();
         }
     }
 }

@@ -17,121 +17,107 @@ namespace RandomProject
 		Connecting,
 		Failed,
 		Connected,
-        Starting,
         EnteringLobby,
-        EnteringRoom,
-        InLobby,
-        InRoom
+        InLobby
     }
 
-    public class Launcher : Singleton<Launcher>, INetworkRunnerCallbacks
+    public class Launcher : Singleton<Launcher>
     {
         public static ConnectionStatus ConnectionStatus = ConnectionStatus.Disconnected;
 
         [Title("Game Runner Object")]
-        [SerializeField] private GameObject gameRunner;
-		public GameMode _gameMode { get; set;}
-        public NetworkRunner _runner { get; set; }
-        public FusionObjectPoolRoot _pool { get; private set; }
-        public LevelManager levelManager { get; private set; }
+        public GameObject gameRunner;
+        public NetworkRunner ActiveRunner { get; private set; }
+        public FusionObjectPoolRoot FusionObjectPool { get; private set; }
+        public LevelManager LevelManager { get; private set; }
 
         [Title("Runner Callbacks")]
-        [SerializeField] private InputHandle inputHandle;
-        [SerializeField] private ConnectionHandle connectionHandle;
-        [SerializeField] private PlayerHandle playerHandle;
-        public ConnectionHandle ConnectionHandle { get => ConnectionHandle; }
-        public InputHandle InputHandle { get => inputHandle; }
-        public PlayerHandle PlayerHandle { get => PlayerHandle; }
+        public RunnerCallback[] runnerCallbacks;
+        public bool IsMaster => ActiveRunner != null && (ActiveRunner.IsServer || ActiveRunner.IsSharedModeMasterClient);
 
-        //Lobby
-        private string lobbyID;
         private Action<List<SessionInfo>> onSessionListUpdated;
+        public SessionProperties props => new SessionProperties(ActiveRunner.SessionInfo.Properties);
+        public SessionInfo SessionInfo => ActiveRunner.SessionInfo;
+        public static Action OnSessionInfoUpdate;
 
         protected override void Awake() {
             base.Awake();
 
-            levelManager = GetComponent<LevelManager>();
+            LevelManager = GetComponent<LevelManager>();
         }
 
         private void Start() 
         {
-            inputHandle.Init(this);
-            connectionHandle.Init(this);
-            playerHandle.Init(this);
-
-            lobbyID = "Default";
+            Array.ForEach(runnerCallbacks, t => t.Init(this));
 
             SceneManager.LoadScene((int)SceneEnum.MAIN_MENU);
         }
 
-        public void SetCreateLobby() => _gameMode = GameMode.Host;
-		public void SetJoinLobby() => _gameMode = GameMode.Client;
-
-        private void Connect()
+        private void CreateRunner()
         {
-            if (_runner == null)
+            if (ActiveRunner == null)
             {
                 GameObject go = Instantiate(gameRunner);
-                _pool = go.GetComponent<FusionObjectPoolRoot>();
+                FusionObjectPool = go.GetComponent<FusionObjectPoolRoot>();
 
-                _runner = go.GetComponent<NetworkRunner>();
-                _runner.ProvideInput = _gameMode != GameMode.Server;
-                _runner.AddCallbacks(this);
+                ActiveRunner = go.GetComponent<NetworkRunner>();
+
+                Array.ForEach(runnerCallbacks, t => ActiveRunner.AddCallbacks(t));
 
                 Debug.Log($"Created gameobject {go.name} - starting game");
             }
         }
 
-        public void Disconnect()
+        public void ShutdownRunner()
         {
-            if (_runner != null)
+            if (ActiveRunner != null)
             {
                 SetConnectionStatus(ConnectionStatus.Disconnected);
-                _runner.Shutdown();
+                ActiveRunner.Shutdown();
             }
         }
 
         //Ini join session dari Lobby
-        public void JoinSession(SessionInfo info)
+        public void JoinSession(SessionInfo info, Action OnSuccess = null, Action OnFailed = null)
         {
             SessionSetting setting = new SessionSetting();
             setting.gameMode = GameMode.Client;
             setting.sessionName = info.Name;
 
-            JoinSessionByName(setting);
+            JoinSessionByName(setting, OnSuccess, OnFailed);
         }
 
         //Ini join session dari Join button
-        public void JoinSession(SessionSetting setting)
+        public void JoinSession(SessionSetting setting, Action OnSuccess = null, Action OnFailed = null)
         {
-            JoinSessionByName(setting);
+            JoinSessionByName(setting, OnSuccess, OnFailed);
         }
 
         //Ini buat session dari Host button
-        public void CreateSession(SessionSetting setting, SessionProperties props)
+        public void CreateSession(SessionSetting setting, SessionProperties props, Action OnSuccess = null, Action OnFailed = null)
         {
-            StartNewSession(setting, props, true);
+            StartNewSession(setting, props, OnSuccess, OnFailed);
         }
 
         #region Create Session
-        public async void FindSessionByProperties(SessionSetting setting, SessionProperties props, bool disableClientSessionCreation = true,
+        public async void FindSessionByProperties(SessionSetting setting, SessionProperties props,
             Action OnSuccess = null, Action OnFailed = null)
         {
-            Connect();
+            CreateRunner();
             SetConnectionStatus(ConnectionStatus.Connecting);
             
             Debug.Log($"Starting game with Properties");
-            _runner.ProvideInput = setting.gameMode != GameMode.Server;
+            ActiveRunner.ProvideInput = setting.gameMode != GameMode.Server;
 
-            var result = await _runner.StartGame(new StartGameArgs
+            var result = await ActiveRunner.StartGame(new StartGameArgs
             {
                 GameMode = setting.gameMode,
-                CustomLobbyName = lobbyID,
+                CustomLobbyName = setting.lobbyID,
                 PlayerCount = setting.playerLimit,
                 SessionProperties = props.Properties,
-                DisableClientSessionCreation = disableClientSessionCreation,
-                SceneManager = levelManager,
-                ObjectPool = _pool
+                DisableClientSessionCreation = true,
+                SceneManager = LevelManager,
+                ObjectPool = FusionObjectPool
             });
 
             if (result.Ok)
@@ -144,24 +130,24 @@ namespace RandomProject
             }
         }
 
-        private async void JoinSessionByName(SessionSetting setting, bool disableClientSessionCreation = true,
+        private async void JoinSessionByName(SessionSetting setting,
             Action OnSuccess = null, Action OnFailed = null)
         {
-            Connect();
+            CreateRunner();
             SetConnectionStatus(ConnectionStatus.Connecting);
 
             Debug.Log($"Join to session {setting.sessionName}");
-            _runner.ProvideInput = setting.gameMode != GameMode.Server;
+            ActiveRunner.ProvideInput = setting.gameMode != GameMode.Server;
 
-            var result = await _runner.StartGame(new StartGameArgs
+            var result = await ActiveRunner.StartGame(new StartGameArgs
             {
                 SessionName = setting.sessionName,
 
                 GameMode = setting.gameMode,
-                CustomLobbyName = lobbyID,
-                SceneManager = levelManager,
-                DisableClientSessionCreation = disableClientSessionCreation,
-                ObjectPool = _pool
+                CustomLobbyName = setting.lobbyID,
+                SceneManager = LevelManager,
+                DisableClientSessionCreation = true,
+                ObjectPool = FusionObjectPool
             });
 
             if (result.Ok)
@@ -174,31 +160,31 @@ namespace RandomProject
             }
         }
 
-        private async void StartNewSession(SessionSetting setting, SessionProperties props, bool disableClientSessionCreation = true, 
+        private async void StartNewSession(SessionSetting setting, SessionProperties props, 
             Action OnSuccess = null, Action OnFailed = null)
         {
-            Connect();
-            SetConnectionStatus(ConnectionStatus.Starting);
+            CreateRunner();
+            SetConnectionStatus(ConnectionStatus.Connecting);
 
             Debug.Log($"Starting game with session {setting.sessionName}");
-            _runner.ProvideInput = setting.gameMode != GameMode.Server;
+            ActiveRunner.ProvideInput = setting.gameMode != GameMode.Server;
 
-            var result = await _runner.StartGame(new StartGameArgs
+            var result = await ActiveRunner.StartGame(new StartGameArgs
             {
                 SessionName = setting.sessionName,
 
                 GameMode = setting.gameMode,
-                CustomLobbyName = lobbyID,
+                CustomLobbyName = setting.lobbyID,
                 PlayerCount = setting.playerLimit,
                 SessionProperties = props.Properties,
-                DisableClientSessionCreation = disableClientSessionCreation,
-                SceneManager = levelManager,
-                ObjectPool = _pool
+                DisableClientSessionCreation = true,
+                SceneManager = LevelManager,
+                ObjectPool = FusionObjectPool
             });
 
             if (result.Ok)
             {
-                _runner.SessionInfo.IsVisible = setting.isVisible;
+                ActiveRunner.SessionInfo.IsVisible = setting.isVisible;
 
                 OnSuccess?.Invoke();
             }
@@ -211,13 +197,12 @@ namespace RandomProject
         public async Task EnterLobby(string lobbyId, Action<List<SessionInfo>> onSessionListUpdatedCallback,
             Action OnSuccess = null, Action OnFailed = null)
         {
-            Connect();
+            CreateRunner();
             SetConnectionStatus(ConnectionStatus.EnteringLobby);
 
-            lobbyID = lobbyId;
             onSessionListUpdated = onSessionListUpdatedCallback;
 
-            var result = await _runner.JoinSessionLobby(SessionLobby.Custom, lobbyId);
+            var result = await ActiveRunner.JoinSessionLobby(SessionLobby.Custom, lobbyId);
 
             if (result.Ok)
             {
@@ -247,74 +232,36 @@ namespace RandomProject
 			if (status == ConnectionStatus.Disconnected || status == ConnectionStatus.Failed)
 			{
                 //Load main menu lagi
-				SceneManager.LoadScene(0);
-			}
+                if (Application.isPlaying)
+                {
+                    SceneManager.LoadSceneAsync((int)SceneEnum.MAIN_MENU);
+                }
+            }
 		}
 
-        #region RUNNER CALLBACKS
-        //RUNNER CALLBACKS
-        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+        public void DestroyRunner()
         {
-            playerHandle.OnPlayerJoined(runner, player);
-        }
-        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
-        {
-            playerHandle.OnPlayerLeft(runner, player);
-        }
-        public void OnInput(NetworkRunner runner, NetworkInput input)
-        {
-            inputHandle.OnInput(runner, input);
-        }
-        public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
-        {
-            inputHandle.OnInputMissing(runner, player, input);
-        }
-        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
-        {
-            connectionHandle.OnShutdown(runner, shutdownReason);
+            if (ActiveRunner)
+                Destroy(ActiveRunner.gameObject);
+            ActiveRunner = null;
 
-            if (_runner)
-                Destroy(_runner.gameObject);
+            FusionObjectPool.ClearPools();
+            FusionObjectPool = null;
+        }
 
-            // Reset the object pools
-            _pool.ClearPools();
-            _pool = null;
-            PlayerManager.AllPlayers.Clear();
-            _runner = null;
-
-            if (Application.isPlaying)
-            {
-                SceneManager.LoadSceneAsync((int)SceneEnum.MAIN_MENU);
-            }
-        }
-        public void OnConnectedToServer(NetworkRunner runner)
+        public void UpdateLobby(List<SessionInfo> sessionList)
         {
-            connectionHandle.OnConnectedToServer(runner);
-        }
-        public void OnDisconnectedFromServer(NetworkRunner runner)
-        {
-            connectionHandle.OnDisconnectedFromServer(runner);
-        }
-        public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
-        {
-            connectionHandle.OnConnectRequest(runner, request, token);
-        }
-        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
-        {
-            connectionHandle.OnConnectFailed(runner, remoteAddress, reason);
-        }
-        public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
-        {
-            SetConnectionStatus(ConnectionStatus.InLobby);
             onSessionListUpdated?.Invoke(sessionList);
         }
 
-        public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-        public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
-        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
-        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
-        public void OnSceneLoadDone(NetworkRunner runner) { }
-        public void OnSceneLoadStart(NetworkRunner runner) { }
-        #endregion
+        public void SetProperties(MissionRegion missionRegion, string missionName, MissionDifficulty missionDifficulty)
+        {
+            SessionProperties prop = new SessionProperties();
+            prop.missionRegion = missionRegion;
+            prop.missionName = missionName;
+            prop.missionDifficulty = missionDifficulty;
+
+            ActiveRunner.SessionInfo.UpdateCustomProperties(prop.Properties);            
+        }
     }
 }

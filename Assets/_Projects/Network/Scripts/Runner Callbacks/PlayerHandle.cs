@@ -10,13 +10,17 @@ namespace RandomProject
     public class PlayerHandle : RunnerCallback
     {
         public PlayerInfo playerInfoPrefab;
+        public GameManager gameManager;
 
 		public override void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
             Debug.Log($"Player {player} Joined!");
 
-			if (runner.IsServer)
+			if (launcher.IsMaster)
 			{
+                if(runner.GameMode == GameMode.Host)
+                    runner.Spawn(gameManager, Vector3.zero, Quaternion.identity);
+
 				runner.Spawn(playerInfoPrefab, Vector3.zero, Quaternion.identity, player);
 			}
 

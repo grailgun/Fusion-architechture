@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5334566930345116063}
   - component: {fileID: 556757833642031127}
   - component: {fileID: 5739690527633969869}
+  - component: {fileID: 8838476549998745756}
   - component: {fileID: 833682998}
   - component: {fileID: 879675473}
   m_Layer: 0
@@ -52,9 +53,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameRunner: {fileID: 3880611777990782321, guid: 6e3c317ca3444064ea7be95c55011806,
     type: 3}
-  inputHandle: {fileID: 5739690527633969869}
-  connectionHandle: {fileID: 5334566930345116063}
-  playerHandle: {fileID: 556757833642031127}
+  runnerCallbacks:
+  - {fileID: 5739690527633969869}
+  - {fileID: 556757833642031127}
+  - {fileID: 5334566930345116063}
+  - {fileID: 8838476549998745756}
 --- !u!114 &5334566930345116063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,6 +84,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInfoPrefab: {fileID: 3547113746806325218, guid: 94b4a965c03dad949bdc8e5dda4dd462,
     type: 3}
+  gameManager: {fileID: 3974069957068174829, guid: c6bbdb6c37534834fa6534e193cea289,
+    type: 3}
 --- !u!114 &5739690527633969869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,6 +106,18 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
+--- !u!114 &8838476549998745756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347584423115849994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe36449435796cc4395c5da79e24b679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &833682998
 MonoBehaviour:
   m_ObjectHideFlags: 0
