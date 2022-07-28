@@ -25,7 +25,7 @@ namespace RandomProject
         public async void ShowLobby()
         {
             OnSessionListUpdate(new List<SessionInfo>());
-            await Launcher.Instance.EnterLobby("Default", OnSessionListUpdate);
+            await Launcher.Instance.EnterLobby("Default");
         }
 
         private void OnSessionListUpdate(List<SessionInfo> sessionList)

@@ -13,8 +13,6 @@ namespace RandomProject
         private TextMeshProUGUI roomName;
         [SerializeField]
         private TextMeshProUGUI playerAmount;
-        [SerializeField]
-        private TextMeshProUGUI missionName;
 
         private SessionInfo info;
 
@@ -24,10 +22,6 @@ namespace RandomProject
 
             roomName.text = info.Name;
             playerAmount.text = $"{info.PlayerCount}/{info.MaxPlayers}";
-
-            SessionProperties props = new SessionProperties(info.Properties);
-
-            missionName.text = props.missionName;
         }
 
         public void OnPressed()

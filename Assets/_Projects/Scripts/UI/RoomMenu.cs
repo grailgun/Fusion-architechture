@@ -12,37 +12,22 @@ namespace RandomProject
 {
     public class RoomMenu : Menu<RoomMenu>
     {
-        public MissionList missionList;
         [Title("Room Status")]
         public TMP_Text roomName;
-        public TMP_Text regionName;
-        public TMP_Text missionName;
-        public TMP_Text difficultyName;
-
-        [Title("Room Settings")]
-        public TMP_Dropdown regionDropdown;
-        public TMP_Dropdown missionDropdown;
-        public TMP_Dropdown difficultyDropdown;
-        public Toggle visibilityToggle;
-        public GameObject roomSettingPanel;
 
         [Title("Player List")]
         public PlayerRoomItem playerItemUI;
         public Transform playerItemParent;
-
         public readonly Dictionary<PlayerInfo, PlayerRoomItem> ListItems = new Dictionary<PlayerInfo, PlayerRoomItem>();
 
         private void OnEnable()
         {
             SubscribeEvent();
-            SetDropdown();
-            regionDropdown.onValueChanged.AddListener(SetMissionListBasedOnRegion);
         }
 
         private void OnDisable()
         {
             UnSubscribeEvent();
-            regionDropdown.onValueChanged.RemoveAllListeners();
         }
 
         private void SubscribeEvent()
@@ -66,9 +51,6 @@ namespace RandomProject
         private void UpdateRoomDetail(GameManager manager)
         {
             roomName.text = manager.RoomName;
-            regionName.text = $"{manager.Region}";
-            missionName.text = manager.MissionName;
-            difficultyName.text = $"{manager.MissionDifficulty}";
         }
 
         private void AddPlayer(PlayerInfo player)
@@ -109,54 +91,6 @@ namespace RandomProject
         {
             Close();
             Launcher.Instance.ShutdownRunner();
-        }
-
-        public void ShowRoomSetting(bool condition)
-        {
-            roomSettingPanel.SetActive(condition);
-
-            if (condition)
-            {
-                SetDropdown();
-
-                var session = Launcher.Instance.SessionInfo;
-                var prop = Launcher.Instance.props;
-                
-                regionDropdown.value = (int)prop.missionRegion;
-                missionDropdown.value = missionList.GetMissionIndexByRegion(prop.missionRegion, prop.missionName);
-                difficultyDropdown.value = (int)prop.missionDifficulty;
-                visibilityToggle.isOn = session.IsValid;
-            }
-        }
-
-        private void SetDropdown()
-        {
-            SetRegionDropdown();
-            difficultyDropdown.ClearOptions();
-            difficultyDropdown.AddOptions(Enum.GetNames(typeof(MissionDifficulty)).ToList());
-        }
-
-        private void SetMissionListBasedOnRegion(int value)
-        {
-            var region = (MissionRegion)value;
-            missionDropdown.ClearOptions();
-            missionDropdown.AddOptions(missionList.GetMissionNameListByRegion(region));
-        }
-
-        private void SetRegionDropdown()
-        {
-            regionDropdown.ClearOptions();
-            regionDropdown.AddOptions(Enum.GetNames(typeof(MissionRegion)).ToList());
-            SetMissionListBasedOnRegion(regionDropdown.value);
-        }
-
-        public void SaveUpdatedProperties()
-        {
-            GameManager.Instance.SetRoomSetting((MissionRegion)regionDropdown.value, 
-                missionDropdown.options[missionDropdown.value].text, (MissionDifficulty)difficultyDropdown.value);
-            
-            Launcher.Instance.SetProperties((MissionRegion)regionDropdown.value, 
-                missionDropdown.options[missionDropdown.value].text, (MissionDifficulty)difficultyDropdown.value);
         }
     }
 }
