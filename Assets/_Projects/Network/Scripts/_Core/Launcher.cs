@@ -257,11 +257,17 @@ namespace RandomProject
         public void SetProperties(MissionRegion missionRegion, string missionName, MissionDifficulty missionDifficulty)
         {
             SessionProperties prop = new SessionProperties();
+            prop.hostName = props.hostName;
             prop.missionRegion = missionRegion;
             prop.missionName = missionName;
             prop.missionDifficulty = missionDifficulty;
 
             ActiveRunner.SessionInfo.UpdateCustomProperties(prop.Properties);            
+        }
+
+        public void SetVisibility(bool isVisible)
+        {
+            ActiveRunner.SessionInfo.IsVisible = isVisible;
         }
     }
 }

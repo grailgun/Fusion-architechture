@@ -636,6 +636,7 @@ MonoBehaviour:
   roomItemParent: {fileID: 250301045708809434}
   roomItemPrefab: {fileID: 5016592736872978894, guid: a945c38cf7be00d4990fb66d519ee34f,
     type: 3}
+  playerData: {fileID: 11400000, guid: b31d9590df32c864b918b3cae7f34763, type: 2}
 --- !u!1 &510031686495176505
 GameObject:
   m_ObjectHideFlags: 0

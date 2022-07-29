@@ -22,12 +22,13 @@ namespace RandomProject
         {
             this.info = info;
 
-            roomName.text = info.Name;
             playerAmount.text = $"{info.PlayerCount}/{info.MaxPlayers}";
 
             SessionProperties props = new SessionProperties(info.Properties);
 
-            missionName.text = props.missionName;
+            roomName.text = props.hostName;
+            missionName.text = $"{props.missionName} " +
+                $"({props.missionRegion}, {props.missionDifficulty})";
         }
 
         public void OnPressed()

@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace RandomProject
@@ -15,6 +16,10 @@ namespace RandomProject
         [SerializeField]
         private RoomItemUI roomItemPrefab;
 
+        [Title("Player Data")]
+        public PlayerData playerData;
+
+        private List<SessionInfo> sessionList = new List<SessionInfo>();
         private List<RoomItemUI> roomItems = new List<RoomItemUI>();
 
         public void QuitLobby()
@@ -30,15 +35,28 @@ namespace RandomProject
 
         private void OnSessionListUpdate(List<SessionInfo> sessionList)
         {
-            DisableRoomItemUI();
+            this.sessionList = sessionList;
+            ShowSession();
+        }
 
-            foreach (SessionInfo sessionInfo in sessionList)
+        private void ShowSession()
+        {
+            DisableRoomItemUI();
+            var filteredSession = GetFilteredSession();
+            foreach (SessionInfo sessionInfo in filteredSession)
             {
+                //Create custom filter and sort
                 var roomItem = Instantiate(roomItemPrefab, roomItemParent);
                 roomItem.SetRoom(sessionInfo);
-
                 roomItems.Add(roomItem);
             }
+        }
+
+        private List<SessionInfo> GetFilteredSession()
+        {
+            return sessionList.Where(info => 
+                playerData.UnlockedMission.Any(x => x.missionName == new SessionProperties(info.Properties).missionName))
+                .ToList();
         }
 
         private void DisableRoomItemUI()

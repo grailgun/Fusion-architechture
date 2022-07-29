@@ -90,6 +90,7 @@ namespace RandomProject
             setting.isVisible = visibilityToggle.isOn;
 
             SessionProperties props = new SessionProperties();
+            props.hostName = ClientInfo.Username;
             props.missionRegion = (MissionRegion)regionDropdown.value;
             props.missionName = missionDropdown.options[missionDropdown.value].text;
             props.missionDifficulty = (MissionDifficulty)difficultyDropdown.value;

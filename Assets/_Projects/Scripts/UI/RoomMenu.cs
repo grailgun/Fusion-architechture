@@ -125,7 +125,7 @@ namespace RandomProject
                 regionDropdown.value = (int)prop.missionRegion;
                 missionDropdown.value = missionList.GetMissionIndexByRegion(prop.missionRegion, prop.missionName);
                 difficultyDropdown.value = (int)prop.missionDifficulty;
-                visibilityToggle.isOn = session.IsValid;
+                visibilityToggle.isOn = session.IsVisible;
             }
         }
 
@@ -157,6 +157,8 @@ namespace RandomProject
             
             Launcher.Instance.SetProperties((MissionRegion)regionDropdown.value, 
                 missionDropdown.options[missionDropdown.value].text, (MissionDifficulty)difficultyDropdown.value);
+
+            Launcher.Instance.SetVisibility(visibilityToggle.isOn);
         }
     }
 }
