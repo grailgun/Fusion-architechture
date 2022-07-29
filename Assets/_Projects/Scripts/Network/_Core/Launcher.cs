@@ -93,6 +93,11 @@ namespace RandomProject
             StartNewSession(setting, props);
         }
 
+        public void CreateSession(SessionSetting setting)
+        {
+            StartNewSession(setting);
+        }
+
         #region Create Session
         private void InitiateSession(SessionSetting setting)
         {
@@ -166,6 +171,25 @@ namespace RandomProject
                 DisableClientSessionCreation = true,
 
                 SessionProperties = props.Properties,
+                SceneManager = LevelManager,
+                ObjectPool = FusionObjectPool
+            });
+
+            ConnectionEvent.TriggerEvent(result);
+        }
+
+        private async void StartNewSession(SessionSetting setting)
+        {
+            InitiateSession(setting);
+            var result = await ActiveRunner.StartGame(new StartGameArgs
+            {
+                SessionName = setting.sessionName,
+                GameMode = setting.gameMode,
+                CustomLobbyName = setting.lobbyID,
+                PlayerCount = setting.playerLimit,
+
+                DisableClientSessionCreation = true,
+
                 SceneManager = LevelManager,
                 ObjectPool = FusionObjectPool
             });

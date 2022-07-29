@@ -11,6 +11,7 @@ namespace RandomProject
 {
     public class CreateOrJoinMenu : Menu<CreateOrJoinMenu>
     {
+        public TextMeshProUGUI statusText;
         public TextMeshProUGUI hostOrJoinButtonText;
 
         [Title("Room Settings")]
@@ -30,7 +31,8 @@ namespace RandomProject
         public void SetMenu(bool isHost)
         {
             this.isHost = isHost;
-            hostOrJoinButtonText.text = isHost ? "Create Room" : "Join Room";
+            statusText.text = isHost ? "Create Room" : "Join Room";
+            hostOrJoinButtonText.text = isHost ? "Create" : "Join";
         }
 
         public void CreateOrJoinRoom()
@@ -52,6 +54,7 @@ namespace RandomProject
             setting.sessionName = roomNameInput.text;
             setting.playerLimit = 5;
 
+            Launcher.Instance.CreateSession(setting);
         }
 
         private void JoinRoom()
