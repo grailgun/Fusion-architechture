@@ -1,31 +1,21 @@
+using Fusion;
 using GameLokal.Toolkit;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace RandomProject
 {
-    public enum ConnectionType
-    {
-        Failed, Session, Lobby
-    }
-
     public struct ConnectionEvent
     {
-        public bool isSuccess;
-        public ConnectionType status;
+        public StartGameResult Result;
 
-        public ConnectionEvent(bool isSuccess, ConnectionType connectionStatus)
+        public ConnectionEvent(StartGameResult Result)
         {
-            this.isSuccess = isSuccess;
-            this.status = connectionStatus;
+            this.Result = Result;
         }
 
         public static ConnectionEvent e;
-        public static void TriggerEvent(bool isSuccess, ConnectionType connectionStatus)
+        public static void TriggerEvent(StartGameResult Result)
         {
-            e.isSuccess = isSuccess;
-            e.status = connectionStatus;
+            e.Result = Result;
             EventManager.TriggerEvent(e);
         }
     }

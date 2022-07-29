@@ -22,10 +22,10 @@ namespace RandomProject
             Launcher.Instance.ShutdownRunner();
         }
 
-        public async void ShowLobby()
+        public void ShowLobby()
         {
             OnSessionListUpdate(new List<SessionInfo>());
-            await Launcher.Instance.EnterLobby("Default");
+            Launcher.Instance.EnterLobby("Default");
         }
 
         private void OnSessionListUpdate(List<SessionInfo> sessionList)

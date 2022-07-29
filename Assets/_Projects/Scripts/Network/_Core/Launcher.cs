@@ -74,139 +74,127 @@ namespace RandomProject
             }
         }
 
-        //Ini join session dari Lobby
-        public void JoinSession(SessionInfo info, Action OnSuccess = null, Action OnFailed = null)
+        public void JoinSession(SessionInfo info)
         {
             SessionSetting setting = new SessionSetting();
             setting.gameMode = GameMode.Client;
             setting.sessionName = info.Name;
 
-            FindSessionByName(setting, OnSuccess, OnFailed);
+            FindSessionByName(setting);
         }
 
-        //Ini join session dari Join button
-        public void JoinSession(SessionSetting setting, Action OnSuccess = null, Action OnFailed = null)
+        public void JoinSession(SessionSetting setting)
         {
-            FindSessionByName(setting, OnSuccess, OnFailed);
+            FindSessionByName(setting);
         }
 
-        //Ini buat session dari Host button
-        public void CreateSession(SessionSetting setting, SessionProperties props, Action OnSuccess = null, Action OnFailed = null)
+        public void CreateSession(SessionSetting setting, SessionProperties props)
         {
-            StartNewSession(setting, props, OnSuccess, OnFailed);
+            StartNewSession(setting, props);
         }
 
         #region Create Session
-        public async void FindSessionByProperties(SessionSetting setting, SessionProperties props,
-            Action OnSuccess = null, Action OnFailed = null)
+        private void InitiateSession(SessionSetting setting)
         {
             CreateRunner();
             SetConnectionStatus(ConnectionStatus.Connecting);
-            
-            Debug.Log($"Starting game with Properties");
             ActiveRunner.ProvideInput = setting.gameMode != GameMode.Server;
+        }
 
+        public async void FindSessionByProperties(SessionSetting setting, Dictionary<string, SessionProperty> properties)
+        {
+            InitiateSession(setting);
             var result = await ActiveRunner.StartGame(new StartGameArgs
             {
                 GameMode = setting.gameMode,
                 CustomLobbyName = setting.lobbyID,
-                PlayerCount = setting.playerLimit,
-                SessionProperties = props.Properties,
                 DisableClientSessionCreation = true,
+
+                SessionProperties = properties,
                 SceneManager = LevelManager,
                 ObjectPool = FusionObjectPool
             });
 
-            if (result.Ok)
-            {
-                OnSuccess?.Invoke();
-            }
-            else
-            {
-                OnFailed?.Invoke();
-            }
+            ConnectionEvent.TriggerEvent(result);
         }
 
-        private async void FindSessionByName(SessionSetting setting,
-            Action OnSuccess = null, Action OnFailed = null)
+        public async void FindSessionByProperties(SessionSetting setting, SessionProperties props)
         {
-            CreateRunner();
-            SetConnectionStatus(ConnectionStatus.Connecting);
+            InitiateSession(setting);
+            var result = await ActiveRunner.StartGame(new StartGameArgs
+            {
+                GameMode = setting.gameMode,
+                CustomLobbyName = setting.lobbyID,
+                DisableClientSessionCreation = true,
 
-            Debug.Log($"Join to session {setting.sessionName}");
-            ActiveRunner.ProvideInput = setting.gameMode != GameMode.Server;
+                SessionProperties = props.Properties,
+                SceneManager = LevelManager,
+                ObjectPool = FusionObjectPool
+            });
 
+            ConnectionEvent.TriggerEvent(result);
+        }
+
+        private async void FindSessionByName(SessionSetting setting)
+        {
+            InitiateSession(setting);
             var result = await ActiveRunner.StartGame(new StartGameArgs
             {
                 SessionName = setting.sessionName,
 
                 GameMode = setting.gameMode,
                 CustomLobbyName = setting.lobbyID,
-                SceneManager = LevelManager,
                 DisableClientSessionCreation = true,
+
+                SceneManager = LevelManager,
                 ObjectPool = FusionObjectPool
             });
 
-            if (result.Ok)
-            {
-                OnSuccess?.Invoke();
-            }
-            else
-            {
-                OnFailed?.Invoke();
-            }
+            ConnectionEvent.TriggerEvent(result);
         }
 
-        private async void StartNewSession(SessionSetting setting, SessionProperties props, 
-            Action OnSuccess = null, Action OnFailed = null)
+        private async void StartNewSession(SessionSetting setting, SessionProperties props)
         {
-            CreateRunner();
-            SetConnectionStatus(ConnectionStatus.Connecting);
-
-            Debug.Log($"Starting game with session {setting.sessionName}");
-            ActiveRunner.ProvideInput = setting.gameMode != GameMode.Server;
-
+            InitiateSession(setting);
             var result = await ActiveRunner.StartGame(new StartGameArgs
             {
                 SessionName = setting.sessionName,
-
                 GameMode = setting.gameMode,
                 CustomLobbyName = setting.lobbyID,
                 PlayerCount = setting.playerLimit,
-                SessionProperties = props.Properties,
+
                 DisableClientSessionCreation = true,
 
+                SessionProperties = props.Properties,
                 SceneManager = LevelManager,
                 ObjectPool = FusionObjectPool
             });
 
-            if (result.Ok)
-            {
-                ActiveRunner.SessionInfo.IsVisible = setting.isVisible;
-
-                OnSuccess?.Invoke();
-            }
-            else
-            {
-                OnFailed?.Invoke();
-            }
+            ConnectionEvent.TriggerEvent(result);
         }
 
-        public async Task EnterLobby(string lobbyId, Action OnSuccess = null, Action OnFailed = null)
+        public async void EnterLobby(string lobbyId, SessionLobby sessionLobby = SessionLobby.Custom)
         {
             CreateRunner();
             SetConnectionStatus(ConnectionStatus.EnteringLobby);
 
-            var result = await ActiveRunner.JoinSessionLobby(SessionLobby.Custom, lobbyId);
-
-            if (result.Ok)
+            StartGameResult result = null;
+            switch (sessionLobby)
             {
-                OnSuccess?.Invoke();
+                case SessionLobby.Invalid:
+                    break;
+                case SessionLobby.ClientServer:
+                    result = await ActiveRunner.JoinSessionLobby(SessionLobby.ClientServer);
+                    break;
+                case SessionLobby.Shared:
+                    result = await ActiveRunner.JoinSessionLobby(SessionLobby.Shared);
+                    break;
+                case SessionLobby.Custom:
+                    result = await ActiveRunner.JoinSessionLobby(SessionLobby.Custom, lobbyId);
+                    break;
             }
-            else
-            {                
-                OnFailed?.Invoke();
-            }
+
+            ConnectionEvent.TriggerEvent(result);
         }
         #endregion
 
