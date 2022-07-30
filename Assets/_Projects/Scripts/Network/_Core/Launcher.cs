@@ -197,6 +197,20 @@ namespace RandomProject
             ConnectionEvent.TriggerEvent(result);
         }
 
+        public async void StartSinglePlayer()
+        {
+            CreateRunner();
+            ActiveRunner.ProvideInput = true;
+            var result = await ActiveRunner.StartGame(new StartGameArgs
+            {
+                GameMode = GameMode.Single,
+                SceneManager = LevelManager,
+                ObjectPool = FusionObjectPool
+            });
+
+            ConnectionEvent.TriggerEvent(result);
+        }
+
         public async void EnterLobby(string lobbyId, SessionLobby sessionLobby = SessionLobby.Custom)
         {
             CreateRunner();
