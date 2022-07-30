@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/_Projects/Scenes/Gameplay.unity.meta
 guid: 57ac55c5bd6acce40a30c8a994ade8dd
 DefaultImporter:
+========
+guid: b31d9590df32c864b918b3cae7f34763
+NativeFormatImporter:
+>>>>>>>> 27b69091a8961f1df321c0e89939dffaf2627b85:Assets/_Projects/Player Data.asset.meta
   externalObjects: {}
+  mainObjectFileID: 11400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
