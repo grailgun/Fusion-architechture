@@ -7,9 +7,9 @@ namespace RandomProject
 	public class InputHandle : RunnerCallback
 	{
 		[Header("Character Input Values")]
-		public Vector2 move;
-		public Vector2 look;
-		public Vector3 lookRotationForward;
+		public Vector3 move;
+		public Vector3 look;
+
 		public bool jump;
 		public bool sprint;
 
@@ -20,31 +20,35 @@ namespace RandomProject
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
-		private bool interactPressed;
+		private NetworkRunner runner;
 
-		public override void OnInput(NetworkRunner runner, NetworkInput input)
+		public void SetInputHandle(NetworkRunner runner)
+        {
+			this.runner = runner;
+        }
+
+		public void AddToCallback()
+        {
+			runner.AddCallbacks(this);
+        }
+
+		public void RemoveFromCallback()
+        {
+			runner.RemoveCallbacks(this);
+        }
+
+        public override void OnInput(NetworkRunner runner, NetworkInput input)
 		{
 			PlayerInputData data = new PlayerInputData();
 
 			data.move = move;
-			data.look = lookRotationForward;
-
-			if (interactPressed)
-				data.buttons |= PlayerInputData.INTERACT;
-			interactPressed = false;
 
 			input.Set(data);
 		}
 
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
-		}
-
-		public void OnInteract(InputValue value)
-        {
-			interactPressed = value.isPressed;
 		}
 
 		public void OnLook(InputValue value)
@@ -64,7 +68,6 @@ namespace RandomProject
 		{
 			SprintInput(value.isPressed);
 		}
-#endif
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
