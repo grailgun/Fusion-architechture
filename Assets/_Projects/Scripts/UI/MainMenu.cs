@@ -18,6 +18,11 @@ namespace RandomProject
             usernameField.text = ClientInfo.Username;
         }
 
+        public void StartSinglePlayer()
+        {
+            Launcher.Instance.StartSinglePlayer();
+        }
+
         public void CreateOrJoinSession(bool isHost)
         {
             var menu = CreateOrJoinMenu.Open();

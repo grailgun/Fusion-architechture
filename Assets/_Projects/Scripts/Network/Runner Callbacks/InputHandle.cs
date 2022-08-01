@@ -7,7 +7,7 @@ namespace RandomProject
 	public class InputHandle : RunnerCallback
 	{
 		[Header("Character Input Values")]
-		public Vector3 move;
+		public Vector2 move;
 		public Vector3 look;
 
 		public bool jump;
@@ -46,7 +46,13 @@ namespace RandomProject
 			input.Set(data);
 		}
 
-		public void OnMove(InputValue value)
+        private void Update()
+        {
+			var moveVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+			move = moveVector;
+        }
+
+        public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}

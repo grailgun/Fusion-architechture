@@ -1,4 +1,5 @@
 using Fusion;
+using GameLokal.Toolkit;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +30,16 @@ namespace RandomProject
             {
                 var session = Launcher.Instance.SessionInfo;                
                 RoomName = session.Name;
+            }
+
+            Invoke(nameof(ChangeToSingleScene), 1f);
+        }
+
+        private void ChangeToSingleScene()
+        {
+            if (Runner.GameMode == GameMode.Single)
+            {
+                Runner.SetActiveScene(2);
             }
         }
     }

@@ -39,6 +39,9 @@ namespace RandomProject
         public SessionInfo SessionInfo => ActiveRunner.SessionInfo;
         public static Action OnSessionInfoUpdate;
 
+        [Title("Single Player Testing Mode")]
+        public bool testSinglePlayer;
+
         protected override void Awake() {
             base.Awake();
 
@@ -48,6 +51,9 @@ namespace RandomProject
         private void Start() 
         {
             Array.ForEach(runnerCallbacks, t => t.Init(this));
+
+            if (testSinglePlayer)
+                StartSinglePlayer();
         }
 
         private void CreateRunner()

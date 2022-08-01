@@ -1,4 +1,6 @@
 using Fusion;
+using Fusion.KCC;
+using UnityEngine;
 
 namespace RandomProject
 {
@@ -9,12 +11,16 @@ namespace RandomProject
         public InputHandle inputPrefab;
         private InputHandle SpawnedInput;
 
+        public KCC kccController;
+
         public override void Spawned()
         {
             base.Spawned();
 
+            Debug.Log("Spawned");
             if (Object.HasInputAuthority)
             {
+                Debug.Log("Has input authority");
                 SpawnedInput = Instantiate(inputPrefab, transform);
                 SpawnedInput.SetInputHandle(Runner);
                 SpawnedInput.AddToCallback();
@@ -29,6 +35,16 @@ namespace RandomProject
         private void OnDisable()
         {
             SpawnedInput?.RemoveFromCallback();
+        }
+
+        public override void FixedUpdateNetwork()
+        {
+            if (GetInput(out PlayerInputData data))
+            {
+                var move = data.move;
+
+                kccController.SetInputDirection(new Vector3(move.x, 0, move.y));
+            }
         }
     }
 }

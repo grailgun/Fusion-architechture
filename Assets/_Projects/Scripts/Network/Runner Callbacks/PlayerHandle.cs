@@ -18,7 +18,7 @@ namespace RandomProject
 
 			if (launcher.IsMaster)
 			{
-                if(runner.GameMode == GameMode.Host)
+                if(runner.GameMode == GameMode.Host || runner.GameMode == GameMode.Single)
                     runner.Spawn(gameManager, Vector3.zero, Quaternion.identity);
 
 				runner.Spawn(playerInfoPrefab, Vector3.zero, Quaternion.identity, player);
