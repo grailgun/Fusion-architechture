@@ -32,8 +32,6 @@ namespace RandomProject
 			yield return null;
 			finished(sceneObjects);
 
-			yield return new WaitForSeconds(1f);
-
 			if (newScene == GAMEPLAY_SCENE)
             {
 				GameEvent.Trigger("Spawn Player");

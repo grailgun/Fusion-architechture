@@ -17,7 +17,6 @@ namespace RandomProject
         {
             base.Spawned();
 
-            Debug.Log("Spawned");
             if (Object.HasInputAuthority)
             {
                 Debug.Log("Has input authority");

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RandomProject
 {
-    public class SpawnManager : NetworkBehaviour, IEventListener<GameEvent>
+    public class SpawnManager : MonoBehaviour, IEventListener<GameEvent>
     {
         [SerializeField]
         private Transform[] spawnPoints;
@@ -25,10 +25,10 @@ namespace RandomProject
         private void SpawnPlayer()
         {
             var players = PlayerManager.AllPlayers;
-
+            Debug.Log(players.Count);
             for (int i = 0; i < players.Count; i++)
             {
-                Runner.Spawn(characterPrefab, spawnPoints[i].position, Quaternion.identity);
+                Launcher.Instance.ActiveRunner.Spawn(characterPrefab, spawnPoints[i].position, Quaternion.identity);
             }
         }
 
@@ -36,7 +36,7 @@ namespace RandomProject
         {
             if (e.EventName == "Spawn Player")
             {
-                SpawnPlayer();
+                Invoke(nameof(SpawnPlayer), 1f);
             }
         }
     }
