@@ -48,11 +48,6 @@ namespace PlayFab
             PlayFabHttp.MakeApiCall("/Client/AcceptTrade", request, AuthType.LoginSession, resultCallback, errorCallback, customData, extraHeaders, context, callSettings);
         }
 
-        public static void UpdateUserTitleDisplayName(UpdateUserTitleDisplayNameRequest request, object onSubmitUsernameSuccess, Action<PlayFabError> onError)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Adds the PlayFab user, based upon a match against a supplied unique identifier, to the friend list of the local user. At
         /// least one of FriendPlayFabId,FriendUsername,FriendEmail, or FriendTitleDisplayName should be initialized.
@@ -1376,6 +1371,19 @@ namespace PlayFab
 
 
             PlayFabHttp.MakeApiCall("/Client/LoginWithGoogleAccount", request, AuthType.None, resultCallback, errorCallback, customData, extraHeaders, context, callSettings);
+        }
+
+        /// <summary>
+        /// Signs the user in using their Google Play Games account credentials
+        /// </summary>
+        public static void LoginWithGooglePlayGamesServices(LoginWithGooglePlayGamesServicesRequest request, Action<LoginResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null)
+        {
+            var context = (request == null ? null : request.AuthenticationContext) ?? PlayFabSettings.staticPlayer;
+            var callSettings = PlayFabSettings.staticSettings;
+            request.TitleId = request.TitleId ?? callSettings.TitleId;
+
+
+            PlayFabHttp.MakeApiCall("/Client/LoginWithGooglePlayGamesServices", request, AuthType.None, resultCallback, errorCallback, customData, extraHeaders, context, callSettings);
         }
 
         /// <summary>

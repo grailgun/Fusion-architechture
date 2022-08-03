@@ -11,32 +11,26 @@ using UnityEngine.UI;
 
 namespace RandomProject
 {
-    public class MainMenu : Menu<MainMenu>
+    public class MainMenu : Menu<MainMenu>, IEventListener<GameEvent>
     {
         public TextMeshProUGUI username;
 
-        [TitleGroup("Login Panel")]
-        public GameObject loginPanel;
-        public TMP_InputField idNameField;
-
-        [Title("Input Username Panel")]
-        public GameObject usernamePanel;
-        public TMP_InputField usernameInput;
-
-        [Title("Customization Panel")]
-        public GameObject customizationPanel;
-
         private void Start()
         {
-            username.text = "Login to get your username";
-
-            loginPanel.SetActive(true);
-            usernamePanel.SetActive(false);
+            LoginPanel.Open();
         }
 
-        public void TryToLogin()
+        private void OnEnable()
         {
-            LoginPlayer(idNameField.text);
+            if (string.IsNullOrEmpty(ClientInfo.Username))
+                username.text = "Login to get your username";
+
+            EventManager.AddListener(this);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.RemoveListener(this);
         }
 
         #region FUSION START GAME
@@ -58,62 +52,12 @@ namespace RandomProject
         }
         #endregion
 
-        private void LoginPlayer(string customID)
+        public void OnEvent(GameEvent e)
         {
-            var request = new LoginWithCustomIDRequest
+            if (e.EventName == "SuccessLogin" || e.EventName == "SuccessSetUsername")
             {
-                CustomId = customID,
-                CreateAccount = true,
-                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
-                {
-                    GetPlayerProfile = true
-                }
-            };
-            PlayFabClientAPI.LoginWithCustomID(request, OnLoginSuccess, OnError);
-        }
-
-        private void OnLoginSuccess(LoginResult obj)
-        {
-            Debug.Log("Success Login");
-            loginPanel.SetActive(false);
-
-            //Get username
-            string displayName = null;
-            if (obj.InfoResultPayload.PlayerProfile != null)
-            {
-                displayName = obj.InfoResultPayload.PlayerProfile.DisplayName;
-                customizationPanel.SetActive(true);
-                ClientInfo.Username = displayName;
+                username.text = ClientInfo.Username;
             }
-
-            bool isEmpty = string.IsNullOrEmpty(displayName);
-            usernamePanel.SetActive(isEmpty);
-            username.text = displayName;
-            customizationPanel.SetActive(!isEmpty);
-        }
-
-        public void SubmitNewUsername()
-        {
-            var request = new UpdateUserTitleDisplayNameRequest
-            {
-                DisplayName = usernameInput.text
-            };
-            PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnSubmitUsernameSuccess, OnError);
-        }
-
-        private void OnSubmitUsernameSuccess(UpdateUserTitleDisplayNameResult obj)
-        {
-            Debug.Log("Updated display name");
-            username.text = obj.DisplayName;
-            ClientInfo.Username = obj.DisplayName;
-
-            usernamePanel.SetActive(false);
-            customizationPanel.SetActive(true);
-        }
-        
-        private void OnError(PlayFabError obj)
-        {
-            Debug.Log(obj.ErrorMessage);
         }
     }
 }

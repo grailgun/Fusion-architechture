@@ -3,38 +3,40 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace RandomProject
 {
     public class SelectableItem : MonoBehaviour
     {
-        [Title("Items")]
-        public Sprite[] items;
         private int index;
-
-        [Title("Component")]
-        public Image previewImage;
-
-        private void Start()
+        public int Index
         {
-            index = 0;
-            ShowItemAtIndex(index);
+            get => index;
+            set
+            {
+                index = value;
+                OnValueChange?.Invoke(index);
+            }
         }
+        public int itemAmount;
 
-        public void SetItem(Sprite[] items)
+        public UnityEvent<int> OnValueChange;
+
+        public void SetItemAmount(int amount)
         {
-            this.items = items;
+            itemAmount = amount;
         }
 
         public void NextItem()
         {
             index++;
 
-            if (index > items.Length - 1)
+            if (index > itemAmount - 1)
                 index = 0;
 
-            ShowItemAtIndex(index);
+            Index = index;
         }
 
         public void PrevItem()
@@ -42,14 +44,9 @@ namespace RandomProject
             index--;
 
             if (index < 0)
-                index = items.Length - 1;
+                index = itemAmount - 1;
 
-            ShowItemAtIndex(index);
-        }
-
-        private void ShowItemAtIndex(int index)
-        {
-            previewImage.sprite = items[index];
+            Index = index;
         }
     }
 }

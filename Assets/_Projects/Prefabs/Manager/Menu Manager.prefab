@@ -100,6 +100,8 @@ MonoBehaviour:
   - {fileID: 2065484118464926464, guid: b05691748767dc74580bf9664e8e81c0, type: 3}
   - {fileID: 3555483315241795450, guid: ab3500cbf2a45954bb521ac6988ddc74, type: 3}
   - {fileID: 7918660581707411343, guid: b143b5ceebf1940448dabf62c62ab673, type: 3}
+  - {fileID: 4760747085160483488, guid: 608bfe53ef00f6c4bb411c95df0f4acd, type: 3}
+  - {fileID: 6636860274950874755, guid: 746ea17e0a0dec04abea435884fa8e02, type: 3}
   autoStartMenu: 1
   startMenu: {fileID: 2065484118464926464, guid: b05691748767dc74580bf9664e8e81c0,
     type: 3}
