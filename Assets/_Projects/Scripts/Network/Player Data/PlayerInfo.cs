@@ -12,9 +12,7 @@ namespace RandomProject
 
         [Networked(OnChanged = nameof(OnPlayerDataChanged))]
         public string Username { get; set; }
-
-        [Networked]
-        public int Level { get; set; }
+        public bool IsLeader => Object != null && Object.IsValid && Object.HasStateAuthority;
 
         private static void OnPlayerDataChanged(Changed<PlayerInfo> changed) => changed.Behaviour.OnPlayerInfoChange();
         private void OnPlayerInfoChange()
@@ -30,11 +28,9 @@ namespace RandomProject
             {
                 Local = this;
                 RPC_SetUsername(ClientInfo.Username);
-                RPC_SetLevel(ClientInfo.Level);
             }
 
             PlayerManager.Instance.AddPlayer(this);
-            
             DontDestroyOnLoad(gameObject);
         }
 
@@ -47,12 +43,6 @@ namespace RandomProject
         private void RPC_SetUsername(string uname)
         {
             Username = uname;
-        }
-
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
-        private void RPC_SetLevel(int value)
-        {
-            Level = value;
         }
     }
 }

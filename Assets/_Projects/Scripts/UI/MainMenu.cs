@@ -10,6 +10,11 @@ namespace RandomProject
 {
     public class MainMenu : Menu<MainMenu>
     {
+        private void Start()
+        {
+            ClientInfo.Username = $"User {Random.Range(0, 1000)}";
+        }
+
         public void StartSinglePlayer()
         {
             Launcher.Instance.StartSinglePlayer();

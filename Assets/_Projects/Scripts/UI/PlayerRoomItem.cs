@@ -8,14 +8,13 @@ namespace RandomProject
     public class PlayerRoomItem : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshProUGUI playerName, playerLevel;
+        private TextMeshProUGUI playerName;
         private PlayerInfo info;
 
         public void Set(PlayerInfo info)
         {
             this.info = info;
             playerName.text = info.Username;
-            playerLevel.text = $"Lv .{info.Level}";
         }
 
         private void Update()
@@ -23,7 +22,6 @@ namespace RandomProject
             if (info.Object != null && info.Object.IsValid)
             {
                 playerName.text = info.Username;
-                playerLevel.text = $"Lv .{info.Level}";
             }
         }
     }

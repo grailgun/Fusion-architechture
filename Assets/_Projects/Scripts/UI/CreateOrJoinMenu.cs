@@ -33,6 +33,7 @@ namespace RandomProject
             setting.lobbyID = "Global";
 
             Launcher.Instance.CreateSession(setting);
+            RoomMenu.Open();
         }
 
         public void JoinRoom()
@@ -43,6 +44,7 @@ namespace RandomProject
             setting.sessionName = roomNameInput.text;
 
             Launcher.Instance.JoinSession(setting);
+            RoomMenu.Open();
         }
     }
 }
