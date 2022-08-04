@@ -258,7 +258,7 @@ namespace RandomProject
                 //Load main menu lagi
                 if (Application.isPlaying)
                 {
-                    SceneManager.LoadSceneAsync(1);
+                    SceneManager.LoadSceneAsync(0);
                 }
             }
 		}
