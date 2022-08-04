@@ -11,12 +11,8 @@ namespace RandomProject
 {
     public class CreateOrJoinMenu : Menu<CreateOrJoinMenu>
     {
-        public TextMeshProUGUI statusText;
-        public TextMeshProUGUI hostOrJoinButtonText;
-
         [Title("Room Settings")]
         public TMP_InputField roomNameInput;
-        private bool isHost;
 
         private void OnEnable()
         {
@@ -28,41 +24,25 @@ namespace RandomProject
 
         }
 
-        public void SetMenu(bool isHost)
-        {
-            this.isHost = isHost;
-            statusText.text = isHost ? "Create Room" : "Join Room";
-            hostOrJoinButtonText.text = isHost ? "Create" : "Join";
-        }
-
-        public void CreateOrJoinRoom()
-        {
-            if (isHost)
-            {
-                CreateRoom();
-            }
-            else
-            {
-                JoinRoom();
-            }
-        }
-
-        private void CreateRoom()
+        public void CreateRoom()
         {
             SessionSetting setting = new SessionSetting();
             setting.gameMode = Fusion.GameMode.Host;
             setting.sessionName = roomNameInput.text;
             setting.playerLimit = 5;
+            setting.lobbyID = "Global";
 
             Launcher.Instance.CreateSession(setting);
         }
 
-        private void JoinRoom()
+        public void JoinRoom()
         {
             SessionSetting setting = new SessionSetting();
             setting.gameMode = Fusion.GameMode.Client;
+            setting.lobbyID = "Global";
             setting.sessionName = roomNameInput.text;
 
+            Launcher.Instance.JoinSession(setting);
         }
     }
 }

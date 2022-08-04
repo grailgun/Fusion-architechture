@@ -10,29 +10,15 @@ namespace RandomProject
 {
     public class MainMenu : Menu<MainMenu>
     {
-        [TitleGroup("Username")]
-        public TMP_InputField usernameField;
-
-        private void OnEnable()
+        public void StartSinglePlayer()
         {
-            usernameField.text = ClientInfo.Username;
+            Launcher.Instance.StartSinglePlayer();
         }
 
-        public void CreateOrJoinSession(bool isHost)
+        public void OpenLobby()
         {
-            var menu = CreateOrJoinMenu.Open();
-            menu.SetMenu(isHost);
-        }
-
-        public void EnterLobby()
-        {
-            var lobbyMenu = LobbyMenu.Open();
-            lobbyMenu.ShowLobby();
-        }
-
-        public void OnUsernameChange(string value)
-        {
-            ClientInfo.Username = value;
+            var lobby = LobbyMenu.Open();
+            lobby.EnterLobby();
         }
     }
 }

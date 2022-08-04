@@ -1,3 +1,4 @@
+using CustomCode.FusionNetwork;
 using Fusion;
 using System;
 using System.Collections;
@@ -13,7 +14,8 @@ namespace RandomProject
         public override void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
             launcher.SetConnectionStatus(ConnectionStatus.InLobby);
-            UpdateLobby(sessionList);
+            //UpdateLobby(sessionList);
+            SessionListEvent.Trigger(sessionList);
         }
 
         public void UpdateLobby(List<SessionInfo> sessionList)
