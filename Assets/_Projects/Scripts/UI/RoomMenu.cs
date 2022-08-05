@@ -103,6 +103,7 @@ namespace RandomProject
         public void StartGame()
         {
             //Start gameplay scene without settings
+            LevelManager.Instance.LoadGameplay();
         }
 
         public void LeaveRoom()

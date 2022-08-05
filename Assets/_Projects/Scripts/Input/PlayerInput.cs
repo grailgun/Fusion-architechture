@@ -19,14 +19,18 @@ public class PlayerInput : NetworkBehaviour, INetworkRunnerCallbacks
     private PlayerInputMap inputMap;
     private InputData inputData = new InputData();
     private PlayerInputMap.PlayerActions playerAction;
-    
+    private Camera cam;
+
     [Networked]
     private NetworkButtons ButtonsPrevious { get; set; }
-    
+
+    private void Start()
+    {
+        cam = Camera.main;
+    }
+
     public override void Spawned()
     {
-        Debug.Log($"This object has input authority : {Object.HasInputAuthority}");
-
         if (Object.HasInputAuthority)
         {
             inputMap = new PlayerInputMap();
@@ -43,6 +47,20 @@ public class PlayerInput : NetworkBehaviour, INetworkRunnerCallbacks
         inputData.buttons.Set(GameplayInput.FireButton, playerAction.LeftMouse.IsPressed());
         inputData.buttons.Set(GameplayInput.ShieldButton, playerAction.RightMouse.IsPressed());
         inputData.moveDirection = playerAction.Movement.ReadValue<Vector2>();
+
+        Vector2 lookInput = playerAction.MousePosition.ReadValue<Vector2>();
+        Vector3 worldPos = Vector3.zero;
+
+        Ray ray = Camera.main.ScreenPointToRay(lookInput);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000))
+        {
+            worldPos = hit.point;
+        }
+
+        Vector3 lookDirection = (worldPos - transform.position).normalized;
+        lookDirection.y = 0;
+        inputData.lookDirection = lookDirection;
     }
 
     public override void FixedUpdateNetwork()

@@ -11,6 +11,7 @@ public struct InputData : INetworkInput
 {
     public NetworkButtons buttons;
     public Vector2 moveDirection;
+    public Vector3 lookDirection;
 
     public bool GetButton(GameplayInput button)
     {

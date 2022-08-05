@@ -6,11 +6,16 @@ using UnityEngine;
 
 namespace RandomProject
 {
-    public class SpawnManager : MonoBehaviour, IEventListener<GameEvent>
+    public class SpawnManager : NetworkBehaviour, IEventListener<GameEvent>
     {
         [SerializeField]
         private Transform[] spawnPoints;
-        public PlayerCharacter characterPrefab;
+        public NetworkObject characterPrefab;
+
+        private void Start()
+        {
+            Invoke(nameof(SpawnPlayer), 1f);
+        }
 
         private void OnEnable()
         {
@@ -25,10 +30,16 @@ namespace RandomProject
         private void SpawnPlayer()
         {
             var players = PlayerManager.AllPlayers;
-            Debug.Log(players.Count);
-            for (int i = 0; i < players.Count; i++)
+
+            int i = 0;
+            foreach (var playerInfo in players)
             {
-                Launcher.Instance.ActiveRunner.Spawn(characterPrefab, spawnPoints[i].position, Quaternion.identity);
+                var pos = spawnPoints[i].position;
+                pos.y = 0.5f;
+
+                Runner.Spawn(characterPrefab, pos, Quaternion.identity, playerInfo.Object.InputAuthority);
+
+                i++;
             }
         }
 

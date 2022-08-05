@@ -313,9 +313,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 36cec582ddc9df540b63940ff49b9f8f, type: 2}
-  m_sharedMaterial: {fileID: -149791920379729677, guid: 36cec582ddc9df540b63940ff49b9f8f,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -667,7 +666,7 @@ PrefabInstance:
     - target: {fileID: 3302633435747776941, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
         type: 3}
       propertyPath: m_fontSize
-      value: 51.65
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 8414068698147910700, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
         type: 3}
@@ -779,6 +778,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8414068698147910702, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414068698147910702, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414068698147910702, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3555483315241795450}
+    - target: {fileID: 8414068698147910702, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414068698147910702, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414068698147910702, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RandomProject.RoomMenu, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8414068698147910702, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8414068698147910703, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
         type: 3}
       propertyPath: m_Color.b
@@ -823,7 +857,7 @@ PrefabInstance:
     - target: {fileID: 3302633435747776941, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
         type: 3}
       propertyPath: m_fontSize
-      value: 51.65
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 8414068698147910700, guid: eeb0a4258fa6af64eb6c7a39d6a90df6,
         type: 3}

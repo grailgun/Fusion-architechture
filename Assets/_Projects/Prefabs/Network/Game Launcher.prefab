@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 556757833642031127}
   - {fileID: 5334566930345116063}
   - {fileID: 8838476549998745756}
+  testSinglePlayer: 0
 --- !u!114 &5334566930345116063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,6 +109,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowHierarchyWindowOverlay: 1
+  gameplayScene:
+    sceneAsset: {fileID: 102900000, guid: 57ac55c5bd6acce40a30c8a994ade8dd, type: 3}
+    scenePath: Assets/_Projects/Scenes/Gameplay.unity
 --- !u!1 &7751340668277743694
 GameObject:
   m_ObjectHideFlags: 0
