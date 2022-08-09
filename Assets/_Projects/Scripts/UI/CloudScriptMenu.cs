@@ -5,7 +5,6 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System;
 using PlayFab.Json;
-using PlayFab.PfEditor.Json;
 using TMPro;
 
 namespace RandomProject
@@ -56,25 +55,11 @@ namespace RandomProject
 
         private void OnExecuteSuccess(ExecuteCloudScriptResult result)
         {
-            Debug.Log(result.FunctionResult);
-            Debug.Log(JsonWrapper.SerializeObject(result.FunctionResult));
             
             foreach (LogStatement log in result.Logs)
             {
                 Debug.Log(log.Message);
             }
-
-            string message = null;
-
-            PlayFab.Json.JsonObject jsonObject = (PlayFab.Json.JsonObject)result.FunctionResult;
-            
-            if (jsonObject.TryGetValue("setup", out object setupMessage))
-                message += (string)setupMessage + "\n";
-
-            if (jsonObject.TryGetValue("answer", out object deliveryMessage))
-                message += (string)deliveryMessage;
-
-            messageText.text = message;
         }
 
         private void OnError(PlayFabError obj)

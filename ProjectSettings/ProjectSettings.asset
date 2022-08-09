@@ -885,11 +885,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 2
-  cloudProjectId: 
+  cloudProjectId: 5432b472-1a94-4633-8c49-c922305f0edf
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: Fusion Architecture
+  organizationId: rizqisinatrya
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
