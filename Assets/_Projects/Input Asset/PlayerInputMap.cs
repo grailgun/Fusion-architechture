@@ -47,7 +47,7 @@ public partial class @PlayerInputMap : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""LeftMouse"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""9b3782a2-db41-4ccd-b9a8-ee3c04015d5f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -56,7 +56,7 @@ public partial class @PlayerInputMap : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""RightMouse"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""ddec6971-e89e-432d-b215-d3277b680ddc"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",

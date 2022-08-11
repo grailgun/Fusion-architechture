@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17412753, g: 0.21774769, b: 0.29994398, a: 1}
+  m_IndirectSpecularColor: {r: 0.17412737, g: 0.2177473, b: 0.29994345, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -372,7 +372,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 12
   m_Depth: -1
   m_CullingMask:
@@ -1043,7 +1043,7 @@ MonoBehaviour:
   - {fileID: 340152913}
   - {fileID: 1256237813}
   - {fileID: 1176925341}
-  characterPrefab: {fileID: 7936403665855079400, guid: db353c9ee08f34547b1c0d46531fee7b,
+  characterPrefab: {fileID: 7936403665855079400, guid: fc5a94610ecd4ea4592170a6ed11ae88,
     type: 3}
 --- !u!1 &1671067292
 GameObject:

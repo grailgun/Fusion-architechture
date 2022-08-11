@@ -41,13 +41,17 @@ public class PlayerController : NetworkBehaviour
     {
         input.onInput.AddListener(OnGetInput);
         input.onPressed.AddListener(OnButtonPressed);
+        input.onReleased.AddListener(OnButtonReleased);
     }
 
     private void OnDisable()
     {
         input.onInput.RemoveListener(OnGetInput);
+        input.onPressed.RemoveListener(OnButtonPressed);
+        input.onReleased.RemoveListener(OnButtonReleased);
     }
 
+    #region INPUT
     private void OnGetInput(InputData inputData)
     {
         var moveDir = inputData.moveDirection.normalized;
@@ -58,6 +62,12 @@ public class PlayerController : NetworkBehaviour
     {
         
     }
+
+    private void OnButtonReleased(NetworkButtons pressed)
+    {
+
+    }
+    #endregion
 
     public override void Spawned()
     {
@@ -80,6 +90,8 @@ public class PlayerController : NetworkBehaviour
         UpdateMovement();
     }
 
+    #region ROTATION METHOD
+
     private void UpdateMovement()
     {        
         Vector3 desiredVelocity = MoveDirection * maxSpeed;
@@ -91,4 +103,5 @@ public class PlayerController : NetworkBehaviour
         CharacterMovement.SimpleMove(desiredVelocity, maxSpeed, actualAcceleration, actualDeceleration,
             actualFriction, actualFriction, gravity, true, deltaTime);
     }
+    #endregion
 }

@@ -43,11 +43,16 @@ public class PlayerInput : NetworkBehaviour, INetworkRunnerCallbacks
     private void Update()
     {
         if (!Object.HasInputAuthority) return;
+        inputData.moveDirection = playerAction.Movement.ReadValue<Vector2>();
 
         inputData.buttons.Set(GameplayInput.FireButton, playerAction.LeftMouse.IsPressed());
         inputData.buttons.Set(GameplayInput.ShieldButton, playerAction.RightMouse.IsPressed());
-        inputData.moveDirection = playerAction.Movement.ReadValue<Vector2>();
 
+        SetLookInput();
+    }
+
+    private void SetLookInput()
+    {
         Vector2 lookInput = playerAction.MousePosition.ReadValue<Vector2>();
         Vector3 worldPos = Vector3.zero;
 
