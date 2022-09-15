@@ -10,14 +10,10 @@ namespace RandomProject
     {
         [Title("Weapon")]
         public float Power;
-        public float CriticalChance;
-        public float CriticalDamage;
         public float Range;
         public float ReloadTime;
-
-        [Title("Projectile")]
         public float ProjectileSpeed;
-        public float ProjectileSpawnRate;
+        public float FireRate;
         public StandaloneProjectile ProjectilePrefab;
     }
 }

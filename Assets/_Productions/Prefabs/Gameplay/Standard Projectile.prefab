@@ -146,10 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5461f06900a9b84458331603c63d0a24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startSpeed: 5
+  startSpeed: 2
   length: 0
   maxDistance: 100
-  maxTime: 5
+  maxTime: 10
   interpolationDuration: 0.3
   interpolationEase: 1
   damage: 10

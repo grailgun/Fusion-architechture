@@ -846,12 +846,10 @@ MonoBehaviour:
   _interpolationDataSource: 0
   setting:
     Power: 10
-    CriticalChance: 10
-    CriticalDamage: 10
     Range: 0
     ReloadTime: 5
     ProjectileSpeed: 50
-    ProjectileSpawnRate: 2
+    FireRate: 1
     ProjectilePrefab: {fileID: 9058523607664706077, guid: 6858d5ee7944bde479c5461e8506cd72,
       type: 3}
   firePoint: {fileID: 2988141065034388273}

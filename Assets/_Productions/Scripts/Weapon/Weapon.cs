@@ -47,7 +47,7 @@ namespace RandomProject
         public void Shoot(NetworkRunner runner, PlayerRef playerRef)
         {
             if (!ShootTimer.ExpiredOrNotRunning(Runner)) return;
-
+            ShootTimer = TickTimer.CreateFromSeconds(Runner, setting.FireRate);
             /*if (!HasAmmo())
             {
                 //noAmmoFeedback?.PlayFeedbacks();
