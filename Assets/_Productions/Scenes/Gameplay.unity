@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17412737, g: 0.2177473, b: 0.29994345, a: 1}
+  m_IndirectSpecularColor: {r: 0.17412753, g: 0.21774769, b: 0.29994398, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -285,6 +285,159 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 340152912}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &457912134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 457912140}
+  - component: {fileID: 457912139}
+  - component: {fileID: 457912138}
+  - component: {fileID: 457912137}
+  - component: {fileID: 457912136}
+  - component: {fileID: 457912135}
+  m_Layer: 0
+  m_Name: Prototype Runner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &457912135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457912134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -232609262, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnInput:
+    m_PersistentCalls:
+      m_Calls: []
+  OnInputMissing:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectedToServer:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisconnectedFromServer:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectRequest:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  PlayerJoined:
+    m_PersistentCalls:
+      m_Calls: []
+  PlayerLeft:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSimulationMessage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnShutdown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSessionListUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCustomAuthenticationResponse:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHostMigration:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSceneLoadDone:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSceneLoadStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReliableData:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &457912136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457912134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b55a6ca2d069a447a0201119c57bc9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sequence: 0
+  BlockingLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  BlockedCheckRadius: 2
+--- !u!114 &457912137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457912134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2e361bfb0186044286ddbd94f2546dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerPrefab: {fileID: 7936403665855079400, guid: fc5a94610ecd4ea4592170a6ed11ae88,
+    type: 3}
+  SpawnMethod: 0
+  StateAuthority: 0
+--- !u!114 &457912138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457912134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3bfdb733d449574a8f4796094d35a63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &457912139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457912134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1199893898, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &457912140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457912134}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &653736346
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,6 +472,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &677649756
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 677649759}
+  - component: {fileID: 677649758}
+  - component: {fileID: 677649757}
+  m_Layer: 0
+  m_Name: Prototype Network Start
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &677649757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677649756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ba5764f4714bd64ab9efab127938e77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnableHotkeys: 0
+  BaseSkin: {fileID: 11400000, guid: e59b35dfeb4b6f54e9b2791b2a40a510, type: 2}
+--- !u!114 &677649758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677649756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88230848386761045af440d808ee3efa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RunnerPrefab: {fileID: 457912139}
+  StartMode: 0
+  AutoStartAs: 2
+  AutoHideGUI: 1
+  AutoClients: 1
+  ServerPort: 27015
+  DefaultRoomName: 
+  AlwaysShowStats: 0
+  InitialScenePath: 
+  _currentStage: 0
+--- !u!4 &677649759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677649756}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &713788698
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +553,7 @@ GameObject:
   - component: {fileID: 713788700}
   - component: {fileID: 713788699}
   - component: {fileID: 713788702}
+  - component: {fileID: 713788703}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -437,6 +660,22 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &713788703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713788698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2103778458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PreferredRunner: 0
+  Components:
+  - {fileID: 713788699}
+  _guid: 78ad5ff6-1db7-45ef-
 --- !u!1 &1094468223
 GameObject:
   m_ObjectHideFlags: 0

@@ -61,4 +61,7 @@ crashlytics-build.properties
 # Ignore tif file
 *.tif
 *.tif.meta
-
+Assets/Doozy/_Extras
+Assets/Doozy/_Extras.meta
+Assets/Doozy/_Examples
+Assets/Doozy/_Examples.meta

@@ -1,4 +1,3 @@
-using EasyCharacterMovement;
 using Fusion;
 using Fusion.KCC;
 using Sirenix.OdinInspector;
